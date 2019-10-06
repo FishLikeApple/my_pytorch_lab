@@ -9,5 +9,4 @@ import os
 
 #define the model
 model = models.resnet101(pretrained=True)
-del model.fc
-model.add=nn.Linear(num_ftrs, 2)
+model.fc=nn.Linear(model.fc.in_features, 2)

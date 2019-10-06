@@ -9,6 +9,5 @@ import os
 
 #define the model
 model = models.resnet101(pretrained=True)
-print(model)
-num_ftrs = model.classifier[6].in_features
-model.classifier[6] = nn.Linear(num_ftrs, 2)
+del model.fc
+model.add=nn.Linear(num_ftrs, 2)

@@ -84,10 +84,10 @@ class SteelDataset(Dataset):
         fname = df.iloc[row_id].name
         labels = df.iloc[row_id][:4]
         
-          if len(labels) == 0:
-              cls = 0
-          else:
-              cls = 1
+      if len(labels) == 0:
+          cls = 0
+      else:
+          cls = 1
         return fname, cls
     
     def __getitem__(self, index):

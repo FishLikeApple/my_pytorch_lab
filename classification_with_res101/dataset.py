@@ -79,6 +79,7 @@ class SteelDataset(Dataset):
         df = df.pivot(index='ImageId',columns='ClassId',values='EncodedPixels')
         df['defects'] = df.count(axis=1)
         return df
+    
     def make_cls(self, row_id, df):
         fname = df.iloc[row_id].name
         labels = df.iloc[row_id][:4]
@@ -87,25 +88,15 @@ class SteelDataset(Dataset):
               cls = 0
           else:
               cls = 1
-        return fname, masks
+        return fname, cls
+    
     def __getitem__(self, index):
-        image_id, mask = self.make_mask(index, self.df)
-        if 1 not in mask:
-            cls = 0
-        else:
-            cls = 1
+        image_id, cls = self.make_cls(index, self.df)
         image_path = os.path.join(self.root_dataset, image_id)
         img = cv2.imread(image_path)
         augmented = self.transforms(image=img)
         img = augmented['image']
-        if self.mode == 'cls':
-            mask = mask[0].permute(2, 0, 1) # 1x4x256x1600
-            mask = (mask.view(4, -1).sum(1)>0)
-            mask = mask.float()
-        else:
-            mask = mask*torch.tensor([1, 2, 3, 4], dtype=torch.float32)
-            mask, _ = torch.max(mask, -1) 
-            mask = mask.long()
+      
         return img, cls
 
     def __len__(self):

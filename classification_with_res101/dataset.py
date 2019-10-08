@@ -86,7 +86,7 @@ class SteelDataset(Dataset):
         if self.n_folds > 0:
             fold_len = len(df) // self.n_folds
             if self.phase == 'train':
-                df = pd.concat(df[:fold_len*self.fold_i]+df[fold_len*(self.fold_i+1):])
+                df = pd.concat([df[:fold_len*self.fold_i], df[fold_len*(self.fold_i+1):]])
             else:
                 df = df[fold_len*self.fold_i:fold_len*(self.fold_i+1)]
         

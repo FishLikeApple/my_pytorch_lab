@@ -32,7 +32,7 @@ args = parser.parse_args()
 num_classes = 2
 
 #define the models and datasets
-if n_folds <= 0:
+if args.n_folds <= 0:
     train_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='train')
     train_loaders = [DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)]
     valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='valid')
@@ -44,12 +44,12 @@ else:
     train_loaders = []
     vaild_loaders = []
     models = []
-    for i in range(n_folds):
+    for i in range(args.n_folds):
         train_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, 
-                                     phase='train', fold_i=i, n_folds=n_folds)
+                                     phase='train', fold_i=i, n_folds=args.n_folds)
         train_loaders.append(DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers))
         valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, 
-                                     phase='valid', fold_i=i, n_folds=n_folds)
+                                     phase='valid', fold_i=i, n_folds=args.n_folds)
         valid_loaders.append(DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers))
         models.append(torchvision.models.resnet101(pretrained=True))
         models[-1].fc=nn.Linear(model.fc.in_features, num_classes)

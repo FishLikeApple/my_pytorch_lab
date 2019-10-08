@@ -69,11 +69,11 @@ class SteelDataset(Dataset):
     def __init__(self, root_dataset, list_data, phase, fold_i=0, n_folds=0):
         super(SteelDataset, self).__init__()
         self.root_dataset = root_dataset
-        self.df = self.__read_file__(list_data=list_data)
-        self.transforms = get_transforms(phase)
         self.phase = phase
         self.fold_i = fold_i
         self.n_folds = n_folds
+        self.df = self.__read_file__(list_data=list_data)
+        self.transforms = get_transforms(phase)
     
     def __read_file__(self, list_data):
         df = pd.read_csv(os.path.join(list_data))

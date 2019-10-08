@@ -84,6 +84,7 @@ class SteelDataset(Dataset):
         fname = df.iloc[row_id].name
         labels = df.iloc[row_id][:4]
         
+        print(labels)
         if len(labels) == 0:
             cls = 0
         else:

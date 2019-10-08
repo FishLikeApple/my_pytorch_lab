@@ -31,7 +31,7 @@ args = parser.parse_args()
 #define some hyperparameters
 num_classes = 2
 
-#define the models and datasets
+#define the models, optimizers and datasets
 if args.n_folds <= 0:
     train_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='train')
     train_loaders = [DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)]
@@ -44,6 +44,7 @@ else:
     train_loaders = []
     valid_loaders = []
     models = []
+    optimizers = []
     for i in range(args.n_folds):
         train_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, 
                                      phase='train', fold_i=i, n_folds=args.n_folds)
@@ -54,11 +55,11 @@ else:
         models.append(torchvision.models.resnet101(pretrained=True))
         models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
         models[-1] = models[-1].cuda()
+        optimizers.append(optim.Adam(models[-1].parameters(), lr=args.lr))
         
-optimizer = optim.Adam(model.parameters(), lr=args.lr)
 loss_fn = nn.CrossEntropyLoss()
 
-def train(data_loader, model):
+def train(data_loader, model, optimizer):
     model.train()
     total_loss = 0
     accumulation_steps = 32 // args.batch_size
@@ -106,7 +107,7 @@ for epoch in range(args.epoch_start, args.epoch_start+args.num_epoch):
     corrections_train = []
     
     for i in range(len(train_loaders)):
-        loss_train = train(train_loaders[i], models[i])
+        loss_train = train(train_loaders[i], models[i], optimizer[i])
         corrections_train.append(valid(valid_loaders[i], models[i]))
         print('[TRAIN] Epoch: {}| Loss: {}| Time: {}'.format(epoch, loss_train, time.time()-start_time))
         state = {

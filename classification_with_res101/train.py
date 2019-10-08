@@ -37,7 +37,7 @@ model = model.cuda()
 train_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='train')
 train_loader = DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)
 optimizer = optim.Adam(model.parameters(), lr=args.lr)
-loss_fn = nn.CrossEntropyLoss 
+loss_fn = nn.CrossEntropyLoss()
 
 def train(data_loader):
     model.train()
@@ -48,8 +48,7 @@ def train(data_loader):
         img = img.cuda()
         cls = cls.cuda()
         outputs = torch.argmax(model(img), dim=1)
-        print(cls)
-        print(outputs)
+
         loss = loss_fn(outputs, cls)
         (loss/accumulation_steps).backward()
         clipping_value = 1.0

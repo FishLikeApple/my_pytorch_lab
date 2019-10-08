@@ -49,6 +49,8 @@ def train(data_loader):
         cls = cls.cuda()
         outputs = torch.argmax(model(img), dim=1)
 
+        print(outputs)
+        print(cls)
         loss = loss_fn(outputs, cls)
         (loss/accumulation_steps).backward()
         clipping_value = 1.0

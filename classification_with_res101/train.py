@@ -67,7 +67,7 @@ for epoch in range(args.epoch_start, args.epoch_start+args.num_epoch):
     state = {
     "status": 'not used',
     "epoch": epoch,
-    "arch": arch,
+    "arch": 'res101',
     "state_dict": model.state_dict()
     }
     torch.save(state, '{}{}_checkpoint_{}.pth'.format(args.new_checkpoint_path, arch, epoch))

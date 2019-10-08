@@ -47,7 +47,7 @@ def train(data_loader):
     for idx, (img, cls) in enumerate(tqdm(data_loader)):
         img = img.cuda()
         cls = cls.cuda()
-        outputs = model(img)
+        outputs = torch.argmax(model(img))
         print(cls)
         print(outputs)
         loss = loss_fn(outputs, cls)

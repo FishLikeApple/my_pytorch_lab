@@ -84,8 +84,8 @@ class SteelDataset(Dataset):
         fname = df.iloc[row_id].name
         labels = df.iloc[row_id][:4]
         
-        print(labels.isnull())
-        if False in labels.isnull():
+        print(labels.isnull().values)
+        if False in labels.isnull().values:
             cls = 1
         else:
             cls = 0

@@ -71,6 +71,9 @@ class SteelDataset(Dataset):
         self.root_dataset = root_dataset
         self.df = self.__read_file__(list_data=list_data)
         self.transforms = get_transforms(phase)
+        self.phase = phase
+        self.fold_i = fold_i
+        self.n_folds = n_folds
     
     def __read_file__(self, list_data):
         df = pd.read_csv(os.path.join(list_data))
@@ -80,12 +83,12 @@ class SteelDataset(Dataset):
         df['defects'] = df.count(axis=1)
         
         # screen out some data
-        if n_folds > 0:
-            fold_len = len(df) // n_folds
-            if phase == 'train':
-                df = pd.concat(df[:fold_len*fold_i]+df[fold_len*(fold_i+1):])
+        if self.n_folds > 0:
+            fold_len = len(df) // self.n_folds
+            if self.phase == 'train':
+                df = pd.concat(df[:fold_len*self.fold_i]+df[fold_len*(self.fold_i+1):])
             else:
-                df = df[fold_len*fold_i:fold_len*(fold_i+1)]
+                df = df[fold_len*self.fold_i:fold_len*(self.fold_i+1)]
         
         return df
     

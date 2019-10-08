@@ -48,6 +48,8 @@ def train(data_loader):
         img = img.cuda()
         cls = cls.cuda()
         outputs = model(img)
+        print(cls)
+        print(outputs)
         loss = loss_fn(outputs, cls)
         (loss/accumulation_steps).backward()
         clipping_value = 1.0

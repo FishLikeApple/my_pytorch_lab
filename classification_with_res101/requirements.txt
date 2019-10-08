@@ -1,0 +1,11 @@
+sklearn
+torch 
+torchvision
+opencv-python
+albumentations==0.3.1
+pandas
+pretrainedmodels
+imgaug
+torchnet
+numpy
+pandas

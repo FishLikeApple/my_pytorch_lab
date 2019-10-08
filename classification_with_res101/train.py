@@ -52,7 +52,7 @@ else:
                                      phase='valid', fold_i=i, n_folds=args.n_folds)
         valid_loaders.append(DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers))
         models.append(torchvision.models.resnet101(pretrained=True))
-        models[-1].fc=nn.Linear(model.fc.in_features, num_classes)
+        models[-1].fc=nn.Linear(models.fc.in_features, num_classes)
         models[-1] = models[-1].cuda()
         
 optimizer = optim.Adam(model.parameters(), lr=args.lr)

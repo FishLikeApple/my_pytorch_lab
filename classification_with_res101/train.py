@@ -8,6 +8,7 @@ import torchvision
 from torchvision import models, transforms
 import os
 from dataset import SteelDataset
+import time
 
 #get input args 
 import argparse

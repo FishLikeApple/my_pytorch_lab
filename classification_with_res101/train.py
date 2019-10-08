@@ -107,7 +107,7 @@ for epoch in range(args.epoch_start, args.epoch_start+args.num_epoch):
     corrections_train = []
     
     for i in range(len(train_loaders)):
-        loss_train = train(train_loaders[i], models[i], optimizer[i])
+        loss_train = train(train_loaders[i], models[i], optimizers[i])
         corrections_train.append(valid(valid_loaders[i], models[i]))
         print('[TRAIN] Epoch: {}| Loss: {}| Time: {}'.format(epoch, loss_train, time.time()-start_time))
         state = {

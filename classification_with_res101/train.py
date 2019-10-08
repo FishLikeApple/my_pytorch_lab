@@ -42,7 +42,7 @@ if args.n_folds <= 0:
     models[-1] = models[-1].cuda()
 else:
     train_loaders = []
-    vaild_loaders = []
+    valid_loaders = []
     models = []
     for i in range(args.n_folds):
         train_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, 
@@ -107,7 +107,7 @@ for epoch in range(args.epoch_start, args.epoch_start+args.num_epoch):
     
     for i in range(len(train_loaders)):
         loss_train = train(train_loaders[i], models[i])
-        corrections_train.append(valid(train_loaders[i], models[i]))
+        corrections_train.append(valid(valid_loaders[i], models[i]))
         print('[TRAIN] Epoch: {}| Loss: {}| Time: {}'.format(epoch, loss_train, time.time()-start_time))
         state = {
         "status": 'not used',

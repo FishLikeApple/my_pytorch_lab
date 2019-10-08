@@ -9,6 +9,7 @@ from torchvision import models, transforms
 import os
 from dataset import SteelDataset
 import time
+from tqdm import tqdm
 
 #get input args 
 import argparse
@@ -50,7 +51,7 @@ def train(data_loader):
         loss = loss_fn(outputs, cls)
         (loss/accumulation_steps).backward()
         clipping_value = 1.0
-        torch.nn.utils.clip_grad_norm_(model.parameters(), clipping_value)
+        nn.utils.clip_grad_norm_(model.parameters(), clipping_value)
         if (idx + 1 ) % accumulation_steps == 0:
             optimizer.step() 
             optimizer.zero_grad()

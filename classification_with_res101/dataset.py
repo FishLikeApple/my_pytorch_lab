@@ -68,7 +68,6 @@ def get_transforms(phase):
 class SteelDataset(Dataset):
     def __init__(self, root_dataset, list_data, phase, fold_i=0, n_folds=0):
         super(SteelDataset, self).__init__()
-        self.mode = mode
         self.root_dataset = root_dataset
         self.df = self.__read_file__(list_data=list_data)
         self.transforms = get_transforms(phase)

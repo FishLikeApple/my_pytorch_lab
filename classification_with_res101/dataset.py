@@ -64,8 +64,9 @@ def get_transforms(phase):
     list_trfms = Compose(list_transforms)
     return list_trfms
     
+# changed for crossvalid
 class SteelDataset(Dataset):
-    def __init__(self, root_dataset, list_data, phase, mode='cls'):
+    def __init__(self, root_dataset, list_data, phase, fold_i=0, n_folds=0):
         super(SteelDataset, self).__init__()
         self.mode = mode
         self.root_dataset = root_dataset
@@ -78,6 +79,15 @@ class SteelDataset(Dataset):
         df['ClassId'] = df['ClassId'].astype(int)
         df = df.pivot(index='ImageId',columns='ClassId',values='EncodedPixels')
         df['defects'] = df.count(axis=1)
+        
+        # screen out some data
+        if n_folds > 0:
+            fold_len = len(df) // n_folds
+            if phase == 'train':
+                df = pd.concat(df[:fold_len*fold_i]+df[fold_len*(fold_i+1):])
+            else:
+                df = df[fold_len*fold_i:fold_len*(fold_i+1)]
+        
         return df
     
     def make_cls(self, row_id, df):

@@ -38,7 +38,7 @@ if args.n_folds <= 0:
     valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='valid')
     valid_loaders = [DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)]
     models = [torchvision.models.resnet101(pretrained=True)]
-    models[-1].fc=nn.Linear(models.fc.in_features, num_classes)
+    models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
     models[-1] = models[-1].cuda()
 else:
     train_loaders = []
@@ -52,7 +52,7 @@ else:
                                      phase='valid', fold_i=i, n_folds=args.n_folds)
         valid_loaders.append(DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers))
         models.append(torchvision.models.resnet101(pretrained=True))
-        models[-1].fc=nn.Linear(models.fc.in_features, num_classes)
+        models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
         models[-1] = models[-1].cuda()
         
 optimizer = optim.Adam(model.parameters(), lr=args.lr)

@@ -87,7 +87,6 @@ def valid(data_loader, model):
     model.eval()
     num_correct = 0
     accumulation_steps = 32 // args.batch_size
-    optimizer.zero_grad()
     for idx, (img, cls) in enumerate(tqdm(data_loader)):
         img = img.cuda()
         cls = cls.cuda()

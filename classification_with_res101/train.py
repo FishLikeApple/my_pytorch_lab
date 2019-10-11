@@ -93,7 +93,7 @@ def valid(data_loader, model):
         outputs = model(img)
         
         preds = outputs.argmax(dim=1)
-        num_correct += torch.eq(pred, cls).sum().float().item()
+        num_correct += torch.eq(preda, cls).sum().float().item()
         
         # delete caches
         del img, cls, outputs, preds
@@ -108,7 +108,7 @@ for epoch in range(args.epoch_start, args.epoch_start+args.num_epoch):
     for i in range(len(train_loaders)):
         loss_train = train(train_loaders[i], models[i], optimizers[i])
         corrections_train.append(valid(valid_loaders[i], models[i]))
-        print('[TRAIN] Epoch: {}| Loss: {}| Time: {}'.format(epoch, loss_train, time.time()-start_time))
+        print('[TRAIN] Epoch: {}| Fold: {}| Loss: {}| Time: {}'.format(epoch, i, loss_train, time.time()-start_time))
         state = {
         "status": 'not used',
         "epoch": epoch,

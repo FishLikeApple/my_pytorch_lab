@@ -35,8 +35,8 @@ num_classes = 2
 if args.n_folds <= 0:
     train_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='train')
     train_loaders = [DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)]
-    valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='valid')
-    valid_loaders = [DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)]
+    #valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='valid')
+    valid_loaders = [] #[DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)]
     models = [torchvision.models.resnet101(pretrained=True)]
     models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
     models[-1] = models[-1].cuda()
@@ -108,7 +108,8 @@ for epoch in range(args.epoch_start, args.epoch_start+args.num_epoch):
     
     for i in range(len(train_loaders)):
         loss_train = train(train_loaders[i], models[i], optimizers[i])
-        corrections_train.append(valid(valid_loaders[i], models[i]))
+        if len(valid_loaders) > 0:
+            corrections_train.append(valid(valid_loaders[i], models[i]))
         print('[TRAIN] Epoch: {}| Fold: {}| Loss: {}| Time: {}'.format(epoch, i, loss_train, time.time()-start_time))
         state = {
         "status": 'not used',
@@ -117,6 +118,7 @@ for epoch in range(args.epoch_start, args.epoch_start+args.num_epoch):
         "state_dict": models[i].state_dict()
         }
         torch.save(state, '{}{}_checkpoint_{}.pth'.format(args.new_checkpoint_path, 'res101_' + str(i), epoch))
-        
-    print('correction:'+str(sum(corrections_train)/len(corrections_train)))
+    
+    if len(valid_loaders) > 0:
+        print('correction:'+str(sum(corrections_train)/len(corrections_train)))
      

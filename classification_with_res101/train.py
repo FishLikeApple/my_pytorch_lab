@@ -40,6 +40,7 @@ if args.n_folds <= 0:
     models = [torchvision.models.resnet101(pretrained=True)]
     models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
     models[-1] = models[-1].cuda()
+    optimizers = [optim.Adam(models[-1].parameters(), lr=args.lr)]
 else:
     train_loaders = []
     valid_loaders = []

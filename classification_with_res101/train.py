@@ -93,7 +93,7 @@ def valid(data_loader, model):
         outputs = model(img)
         
         preds = outputs.argmax(dim=1)
-        num_correct += torch.eq(preda, cls).sum().float().item()
+        num_correct += torch.eq(preds, cls).sum().float().item()
         
         # delete caches
         del img, cls, outputs, preds

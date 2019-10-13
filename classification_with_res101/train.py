@@ -74,8 +74,10 @@ def train(data_loader, model, optimizer):
         clipping_value = 1.0
         nn.utils.clip_grad_norm_(model.parameters(), clipping_value)
         if (idx + 1 ) % accumulation_steps == 0:
-            optimizer.step() 
+            optimizer.step()
             optimizer.zero_grad()
+            with open(args.new_checkpoint_path+'logs.txt', 'a') as f:
+                print('idx:'+str(idx)+'  last_loss:'+str(loss), f)
         total_loss += loss.item()
         
         # delete caches

@@ -40,6 +40,8 @@ if args.n_folds <= 0:
     models = [torchvision.models.resnet101(pretrained=True)]
     models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
     models[-1] = models[-1].cuda()
+    if args.checkpoint != None:
+        models[-1].load_state_dict(torch.load(args.checkpoint+'_'+str(0))['state_dict']) 
     optimizers = [optim.Adam(models[-1].parameters(), lr=args.lr)]
 else:
     train_loaders = []
@@ -56,6 +58,8 @@ else:
         models.append(torchvision.models.resnet101(pretrained=True))
         models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
         models[-1] = models[-1].cuda()
+        if args.checkpoint != None:
+            models[-1].load_state_dict(torch.load(args.checkpoint+'_'+str(i))['state_dict'])
         optimizers.append(optim.Adam(models[-1].parameters(), lr=args.lr))
         
 loss_fn = nn.CrossEntropyLoss()
@@ -119,7 +123,7 @@ for epoch in range(args.epoch_start, args.epoch_start+args.num_epoch):
         "arch": 'res101_' + str(i),
         "state_dict": models[i].state_dict()
         }
-        torch.save(state, '{}{}_checkpoint_{}.pth'.format(args.new_checkpoint_path, 'res101_' + str(i), epoch))
+        torch.save(state, '{}{}_checkpoint_{}.pth_{}'.format(args.new_checkpoint_path, 'res101', epoch, i))
     
     if len(valid_loaders) > 0:
         print('correction:'+str(sum(corrections_train)/len(corrections_train)))

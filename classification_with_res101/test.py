@@ -30,7 +30,7 @@ num_classes = args.num_class
 
 #define the models, optimizers and datasets
 test_dataset = SteelDataset(root_dataset = args.test_dataset, list_data = args.list_test, phase='test')
-test_loader = DataLoader(test_dataset, batch_size = args.batch_size, shuffle=False, num_workers=args.num_workers)
+test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
 if args.n_folds <= 0:
     #valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='valid')
     models = [torchvision.models.resnet101(pretrained=True)]
@@ -55,7 +55,7 @@ def test(data_loader, models):
     for img, segm, img_id in tqdm(data_loader):
         img = img.cuda()
         
-        output = models[-1](img).cpu().detach().numpy()
+        output = models[0](img).cpu().detach().numpy()
         for model in models[1:]:
             output += model(img).cpu().detach().numpy()
         print(output)

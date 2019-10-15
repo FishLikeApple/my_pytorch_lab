@@ -29,7 +29,7 @@ parser.add_argument('--decoder', default="hrnet", type=str)
 parser.add_argument('--mode', default='non-cls', type=str)
 args = parser.parse_args()
 
-test_dataset = TestSteelDataset(root_dataset = args.test_dataset, list_data = args.list_test, phase='test', mode=args.mode)
+test_dataset = SteelDataset(root_dataset = args.test_dataset, list_data = args.list_test, phase='test', mode=args.mode)
 
 model = Model(num_class=args.num_class, encoder = args.encoder, decoder = args.decoder, mode=args.mode)
 model = model.cuda()

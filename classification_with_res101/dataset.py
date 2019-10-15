@@ -109,7 +109,7 @@ class SteelDataset(Dataset):
         augmented = self.transforms(image=img)
         img = augmented['image']
       
-        return img, cls
+        return img, cls, image_id
 
     def __len__(self):
         return len(self.df)

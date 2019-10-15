@@ -10,6 +10,7 @@ import os
 from dataset import SteelDataset
 import time
 from tqdm import tqdm
+import pandas as pd
 
 #get input args 
 import argparse

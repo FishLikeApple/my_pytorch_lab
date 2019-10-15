@@ -22,7 +22,6 @@ parser.add_argument('--test_dataset', default='./data/test_images', type=str, he
 parser.add_argument('--checkpoint', default='./checkpoint.pth', type=str, help='config file path')
 parser.add_argument('--list_test', default='./data/test.csv', type=str)
 parser.add_argument('--submission', default='./submission.csv', type=str)
-parser.add_argument('--batch_size', default=1, type=int)
 parser.add_argument('--num_class', default=5, type=int)
 parser.add_argument('--num_workers', default=1, type=int)
 parser.add_argument('--encoder', default="resnet34", type=str)
@@ -38,7 +37,7 @@ model.load_state_dict(torch.load(args.checkpoint)['state_dict'])
 model.eval()
 criterion = Criterion(mode=args.mode)
 
-test_loader = DataLoader(test_dataset, batch_size = args.batch_size, shuffle=False, num_workers=args.num_workers)
+test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=args.num_workers)
 
 type_list = [1, 2, 3, 4]
 submission = pd.read_csv(args.list_test)
@@ -82,11 +81,8 @@ def test(data_loader):
         img = img.cuda()
         output = model(img).cpu().detach().numpy()
         print(output)
-        output = np.argmax(model(img).cpu().detach().numpy(), axis=0)
-        print(output)
-        for type in type_list: 
-            rle = output2rle(output, type)
-            submission.loc[submission['ImageId_ClassId']==img_id[0]+'_'+str(type), 'EncodedPixels'] = rle
+        a=1/0
+        submission.loc[submission['ImageId_ClassId']==img_id[0]+'_'+str(type), 'EncodedPixels'] = rle
     submission.to_csv(args.submission)
 
 test(test_loader)

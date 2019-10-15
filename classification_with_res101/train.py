@@ -22,14 +22,14 @@ parser.add_argument('--new_checkpoint_path', default='', type=str)
 parser.add_argument('--lr', default=5e-4, type=float)
 parser.add_argument('--epoch_start', default=0, type=int)
 parser.add_argument('--num_epoch', default=200, type=int)
-parser.add_argument('--num_class', default=5, type=int)
+parser.add_argument('--num_class', default=2, type=int)
 parser.add_argument('--num_workers', default=1, type=int)
 parser.add_argument('--n_folds', default=0, type=int)
 parser.add_argument('--clearing_steps', default=12, type=int)
 args = parser.parse_args()
 
 #define some hyperparameters
-num_classes = 2
+num_classes = args.num_class
 
 #define the models, optimizers and datasets
 if args.n_folds <= 0:

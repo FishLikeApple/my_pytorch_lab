@@ -23,6 +23,7 @@ parser.add_argument('--num_class', default=2, type=int)
 parser.add_argument('--num_workers', default=1, type=int)
 parser.add_argument('--n_folds', default=0, type=int)
 parser.add_argument('--clearing_steps', default=12, type=int)
+parser.add_argument('submission', default='submission.csv')
 args = parser.parse_args()
 
 #define some hyperparameters

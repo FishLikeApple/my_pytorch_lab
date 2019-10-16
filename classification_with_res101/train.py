@@ -62,7 +62,7 @@ else:
             models[-1].load_state_dict(torch.load(args.checkpoint+'_'+str(i))['state_dict'])
         optimizers.append(optim.Adam(models[-1].parameters(), lr=args.lr))
         
-loss_fn = nn.CrossEntropyLoss()
+loss_fn = nn.functional.binary_cross_entropy_with_logits
 
 def train(data_loader, model, optimizer):
     model.train()

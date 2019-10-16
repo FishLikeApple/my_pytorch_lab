@@ -60,10 +60,10 @@ def test(data_loader, models):
         for model in models[1:]:
             output += model(img).cpu().detach().numpy()
         if np.argmax(output[0]) == 0:
-            class = ''
+            class_output = ''
         else:
-            class = '1 1'
-        submission.loc[submission['ImageId_ClassId']==img_id[0]+'_'+str(type), 'EncodedPixels'] = class
+            class_output = '1 1'
+        submission.loc[submission['ImageId_ClassId']==img_id[0]+'_'+str(type), 'EncodedPixels'] = class_output
             
     submission.to_csv(args.submission)
                 

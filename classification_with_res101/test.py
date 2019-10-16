@@ -17,7 +17,7 @@ import argparse
 parser = argparse.ArgumentParser(description='Semantic Segmentation')
 parser.add_argument('--test_dataset', default='./data/test_images', type=str, help='config file path')
 parser.add_argument('--list_test', default='./data/test.csv', type=str)
-parser.add_argument('--batch_size', default=None, type=int)
+parser.add_argument('--batch_size', default=1, type=int)
 parser.add_argument('--checkpoint', default=None, type=str)
 parser.add_argument('--num_class', default=2, type=int)
 parser.add_argument('--num_workers', default=1, type=int)

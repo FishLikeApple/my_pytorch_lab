@@ -58,9 +58,11 @@ def test(data_loader, models):
         output = models[0](img).cpu().detach().numpy()
         for model in models[1:]:
             output += model(img).cpu().detach().numpy()
-        print(output)
-        a = 1/0
-        submission.loc[submission['ImageId_ClassId']==img_id[0]+'_'+str(type), 'EncodedPixels'] = rle
+        if np.argmax(output[0]) == 0:
+            class = ''
+        else:
+            class = '1 1'
+        submission.loc[submission['ImageId_ClassId']==img_id[0]+'_'+str(type), 'EncodedPixels'] = class
             
     submission.to_csv(args.submission)
                 

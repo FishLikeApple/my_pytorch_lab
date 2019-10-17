@@ -34,7 +34,7 @@ if args.n_folds <= 0:
     #valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='valid')
     models = [torchvision.models.resnet101(pretrained=True)]
     models[-1].fc=nn.Linear(models[-1].fc.in_features, args.num_class)
-    models[-1].add_module(nn.Sigmoid())
+    models[-1].add_module('output', nn.Sigmoid())
     models[-1] = models[-1].cuda()
     if args.checkpoint != None:
         models[-1].load_state_dict(torch.load(args.checkpoint+'_'+str(0))['state_dict']) 
@@ -43,7 +43,7 @@ else:
     for i in range(args.n_folds): 
         models.append(torchvision.models.resnet101(pretrained=True))
         models[-1].fc=nn.Linear(models[-1].fc.in_features, args.num_class)
-        models[-1].add_module(nn.Sigmoid())
+        models[-1].add_module('output', nn.Sigmoid())
         models[-1] = models[-1].cuda()
         if args.checkpoint != None:
             models[-1].load_state_dict(torch.load(args.checkpoint+'_'+str(i))['state_dict'])

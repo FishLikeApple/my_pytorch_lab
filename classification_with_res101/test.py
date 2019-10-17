@@ -24,10 +24,8 @@ parser.add_argument('--num_workers', default=1, type=int)
 parser.add_argument('--n_folds', default=0, type=int)
 parser.add_argument('--clearing_steps', default=12, type=int)
 parser.add_argument('--submission', default='submission.csv')
+parser.add_argument('--label_threshold', default=0.5)
 args = parser.parse_args()
-
-#define some hyperparameters
-num_classes = args.num_class
 
 #define the models, optimizers and datasets
 test_dataset = SteelDataset(root_dataset = args.test_dataset, list_data = args.list_test, phase='test')
@@ -35,7 +33,8 @@ test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False
 if args.n_folds <= 0:
     #valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='valid')
     models = [torchvision.models.resnet101(pretrained=True)]
-    models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
+    models[-1].fc=nn.Linear(models[-1].fc.in_features, args.num_class)
+    models[-1].add_module(nn.Sigmoid())
     models[-1] = models[-1].cuda()
     if args.checkpoint != None:
         models[-1].load_state_dict(torch.load(args.checkpoint+'_'+str(0))['state_dict']) 
@@ -43,7 +42,8 @@ else:
     models = []
     for i in range(args.n_folds): 
         models.append(torchvision.models.resnet101(pretrained=True))
-        models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
+        models[-1].fc=nn.Linear(models[-1].fc.in_features, args.num_class)
+        models[-1].add_module(nn.Sigmoid())
         models[-1] = models[-1].cuda()
         if args.checkpoint != None:
             models[-1].load_state_dict(torch.load(args.checkpoint+'_'+str(i))['state_dict'])
@@ -56,14 +56,15 @@ def test(data_loader, models):
     for img, segm, img_id in tqdm(data_loader):
         img = img.cuda()
         
-        output = models[0](img).cpu().detach().numpy()
+        output = models[0](img).cpu().detach().numpy()[0]
         for model in models[1:]:
-            output += model(img).cpu().detach().numpy()
-        if np.argmax(output[0]) == 0:
-            class_output = ''
-        else:
-            class_output = '1 1'
-        submission.loc[submission['ImageId_ClassId']==img_id[0]+'_'+str(type), 'EncodedPixels'] = class_output
+            output += model(img).cpu().detach().numpy()[0]
+        for i in range(args.num_class):
+            if output[i] >= (len(models)*args.label_threshold):
+                class_output = '1 1'
+            else:
+                class_output = ''
+            submission.loc[submission['ImageId_ClassId']==img_id[0]+'_'+str(i), 'EncodedPixels'] = class_output
             
     submission.to_csv(args.submission)
                 

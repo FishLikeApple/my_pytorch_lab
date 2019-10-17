@@ -99,9 +99,9 @@ class SteelDataset(Dataset):
         cls = []
         for i in range(len(labels.values)):
             if labels.values[i] != np.nan:
-                cls.append(1)
+                cls.append(1.0)
             else:
-                cls.append(0)
+                cls.append(0.0)
         assert len(cls) == 4
         return fname, cls
     
@@ -111,7 +111,7 @@ class SteelDataset(Dataset):
         img = cv2.imread(image_path)
         augmented = self.transforms(image=img)
         img = augmented['image']
-        cls = torch.tensor(cls, dtpye=float)
+        cls = torch.tensor(cls)
     
         return img, cls, image_id
 

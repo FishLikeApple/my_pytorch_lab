@@ -98,10 +98,10 @@ class SteelDataset(Dataset):
         
         cls = []
         for i in range(len(labels.values)):
-        if labels.values[i] != np.nan:
-            cls.append(1)
-        else:
-            cls.append(0)
+            if labels.values[i] != np.nan:
+                cls.append(1)
+            else:
+                cls.append(0)
         assert len(cls) == 4
         return fname, cls
     

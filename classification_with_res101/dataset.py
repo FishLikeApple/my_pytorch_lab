@@ -100,9 +100,9 @@ class SteelDataset(Dataset):
         for i in range(len(labels.values)):
             if labels.values[i] is not np.nan:
                 cls.append(1.0)
-                print(labels.values[i])
             else:
                 cls.append(0.0)
+        print(cls)
         
         return fname, cls
     

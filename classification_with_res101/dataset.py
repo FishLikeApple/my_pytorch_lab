@@ -96,10 +96,13 @@ class SteelDataset(Dataset):
         fname = df.iloc[row_id].name
         labels = df.iloc[row_id][:4]
         
-        if False in labels.isnull().values:
-            cls = 1
+        cls = []
+        for i in range(len(labels.values)):
+        if labels.values[i] != np.nan:
+            cls.append(1)
         else:
-            cls = 0
+            cls.append(0)
+        assert len(cls) == 4
         return fname, cls
     
     def __getitem__(self, index):

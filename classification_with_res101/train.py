@@ -39,7 +39,7 @@ if args.n_folds <= 0:
     valid_loaders = [] #[DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)]
     models = [torchvision.models.resnet101(pretrained=True)]
     models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
-    models[-1].add_module(nn.Sigmoid())
+    models[-1].add_module('output', nn.Sigmoid())
     models[-1] = models[-1].cuda()
     if args.checkpoint != None:
         models[-1].load_state_dict(torch.load(args.checkpoint+'_'+str(0))['state_dict']) 
@@ -58,6 +58,7 @@ else:
         valid_loaders.append(DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers))
         models.append(torchvision.models.resnet101(pretrained=True))
         models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
+        models[-1].add_module('output', nn.Sigmoid())
         models[-1] = models[-1].cuda()
         if args.checkpoint != None:
             models[-1].load_state_dict(torch.load(args.checkpoint+'_'+str(i))['state_dict'])

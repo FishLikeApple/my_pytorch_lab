@@ -98,11 +98,12 @@ class SteelDataset(Dataset):
         
         cls = []
         for i in range(len(labels.values)):
-            if labels.values[i] != np.nan:
+            if labels.values[i] is not np.nan:
                 cls.append(1.0)
+                print(labels.values[i])
             else:
                 cls.append(0.0)
-        print(cls)
+        
         return fname, cls
     
     def __getitem__(self, index):

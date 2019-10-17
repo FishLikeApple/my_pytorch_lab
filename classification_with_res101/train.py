@@ -22,14 +22,11 @@ parser.add_argument('--new_checkpoint_path', default='', type=str)
 parser.add_argument('--lr', default=5e-4, type=float)
 parser.add_argument('--epoch_start', default=0, type=int)
 parser.add_argument('--num_epoch', default=200, type=int)
-parser.add_argument('--num_class', default=2, type=int)
+parser.add_argument('--num_class', default=4, type=int)
 parser.add_argument('--num_workers', default=1, type=int)
 parser.add_argument('--n_folds', default=0, type=int)
 parser.add_argument('--clearing_steps', default=12, type=int)
 args = parser.parse_args()
-
-#define some hyperparameters
-num_classes = args.num_class
 
 #define the models, optimizers and datasets
 if args.n_folds <= 0:
@@ -38,7 +35,7 @@ if args.n_folds <= 0:
     #valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='valid')
     valid_loaders = [] #[DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)]
     models = [torchvision.models.resnet101(pretrained=True)]
-    models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
+    models[-1].fc=nn.Linear(models[-1].fc.in_features, args.num_class)
     models[-1].add_module('output', nn.Sigmoid())
     models[-1] = models[-1].cuda()
     if args.checkpoint != None:
@@ -57,7 +54,7 @@ else:
                                      phase='valid', fold_i=i, n_folds=args.n_folds)
         valid_loaders.append(DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers))
         models.append(torchvision.models.resnet101(pretrained=True))
-        models[-1].fc=nn.Linear(models[-1].fc.in_features, num_classes)
+        models[-1].fc=nn.Linear(models[-1].fc.in_features, args.num_class)
         models[-1].add_module('output', nn.Sigmoid())
         models[-1] = models[-1].cuda()
         if args.checkpoint != None:

@@ -79,8 +79,8 @@ def train(data_loader, model, optimizer):
         if (idx + 1 ) % accumulation_steps == 0:
             optimizer.step()
             optimizer.zero_grad()
-            with open(args.new_checkpoint_path+'logs.txt', 'a') as f:
-                print('idx:'+str(idx)+'  last_loss:'+str(loss), file=f)
+            #with open(args.new_checkpoint_path+'logs.txt', 'a') as f:
+            print('idx:'+str(idx)+'  last_loss:'+str(loss))
         total_loss += loss.item()
         
         # delete caches

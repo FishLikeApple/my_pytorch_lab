@@ -102,7 +102,6 @@ class SteelDataset(Dataset):
                 cls.append(1.0)
             else:
                 cls.append(0.0)
-        print(cls)
         
         return fname, cls
     

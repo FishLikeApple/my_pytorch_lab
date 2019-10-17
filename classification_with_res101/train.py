@@ -80,7 +80,7 @@ def train(data_loader, model, optimizer):
             optimizer.step()
             optimizer.zero_grad()
             with open(args.new_checkpoint_path+'logs.txt', 'a') as f:
-                print('idx:'+str(idx)+'  last_loss:'+str(loss), f)
+                print('idx:'+str(idx)+'  last_loss:'+str(loss), file=f)
         total_loss += loss.item()
         
         # delete caches

@@ -111,7 +111,7 @@ class SteelDataset(Dataset):
         img = cv2.imread(image_path)
         augmented = self.transforms(image=img)
         img = augmented['image']
-        cls = torch.tensor(cls)
+        cls = torch.tensor(cls, dtpye=float)
     
         return img, cls, image_id
 

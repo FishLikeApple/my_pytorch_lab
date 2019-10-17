@@ -102,7 +102,7 @@ class SteelDataset(Dataset):
                 cls.append(1.0)
             else:
                 cls.append(0.0)
-        assert len(cls) == 4
+        print(cls)
         return fname, cls
     
     def __getitem__(self, index):

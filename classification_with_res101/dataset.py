@@ -65,7 +65,7 @@ def get_transforms(phase):
     return list_trfms
     
 # changed for crossvalid
-class SteelDataset(Dataset):
+class CloudDataset(Dataset):
     def __init__(self, root_dataset, list_data, phase, fold_i=0, n_folds=0):
         super(SteelDataset, self).__init__()
         self.root_dataset = root_dataset

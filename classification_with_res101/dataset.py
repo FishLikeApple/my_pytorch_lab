@@ -67,7 +67,7 @@ def get_transforms(phase):
 # changed for crossvalid
 class CloudDataset(Dataset):
     def __init__(self, root_dataset, list_data, phase, fold_i=0, n_folds=0):
-        super(SteelDataset, self).__init__()
+        super(CloudDataset, self).__init__()
         self.root_dataset = root_dataset
         self.phase = phase
         self.fold_i = fold_i

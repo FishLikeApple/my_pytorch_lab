@@ -33,8 +33,8 @@ import random
 from imgaug import augmenters as iaa
 
 def get_transforms(phase):
-    original_height = 256
-    original_width = 1600
+    original_height = 1400
+    original_width = 2100
     list_transforms = []
     if phase == "train":
         list_transforms.extend(
@@ -77,9 +77,8 @@ class SteelDataset(Dataset):
     
     def __read_file__(self, list_data):
         df = pd.read_csv(os.path.join(list_data))
-        df['ImageId'], df['ClassId'] = zip(*df['ImageId_ClassId'].str.split('_'))
-        df['ClassId'] = df['ClassId'].astype(int)
-        df = df.pivot(index='ImageId',columns='ClassId',values='EncodedPixels')
+        df['Image'], df['Label'] = zip(*df['Image_Label'].str.split('_'))
+        df = df.pivot(index='Image',columns='Label',values='EncodedPixels')
         df['defects'] = df.count(axis=1)
         
         # screen out some data

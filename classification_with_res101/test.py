@@ -7,7 +7,7 @@ import numpy as np
 import torchvision
 from torchvision import transforms
 import os
-from dataset import SteelDataset
+from dataset import CloudDataset
 import time
 from tqdm import tqdm
 import pandas as pd

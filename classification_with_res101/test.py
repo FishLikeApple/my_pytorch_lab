@@ -14,7 +14,7 @@ import pandas as pd
 
 #get input args 
 import argparse
-parser = argparse.ArgumentParser(description='Semantic Segmentation')
+parser = argparse.ArgumentParser(description='classification')
 parser.add_argument('--test_dataset', default='./data/test_images', type=str, help='config file path')
 parser.add_argument('--list_test', default='./data/test.csv', type=str)
 parser.add_argument('--batch_size', default=1, type=int)
@@ -28,7 +28,7 @@ parser.add_argument('--label_threshold', default=0.5)
 args = parser.parse_args()
 
 #define the models, optimizers and datasets
-test_dataset = SteelDataset(root_dataset = args.test_dataset, list_data = args.list_test, phase='test')
+test_dataset = CloudDataset(root_dataset = args.test_dataset, list_data = args.list_test, phase='test')
 test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False, num_workers=args.num_workers)
 if args.n_folds <= 0:
     #valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='valid')

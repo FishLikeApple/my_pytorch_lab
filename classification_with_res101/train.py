@@ -7,13 +7,13 @@ import numpy as np
 import torchvision
 from torchvision import transforms
 import os
-from dataset import SteelDataset
+from dataset import CloudDataset
 import time
 from tqdm import tqdm
 
 #get input args 
 import argparse
-parser = argparse.ArgumentParser(description='Semantic Segmentation')
+parser = argparse.ArgumentParser(description='classification')
 parser.add_argument('--train_dataset', default='./data/train_images', type=str, help='config file path')
 parser.add_argument('--list_train', default='./data/train.csv', type=str)
 parser.add_argument('--batch_size', default=None, type=int)
@@ -30,7 +30,7 @@ args = parser.parse_args()
 
 #define the models, optimizers and datasets
 if args.n_folds <= 0:
-    train_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='train')
+    train_dataset = CloudDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='train')
     train_loaders = [DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)]
     #valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, phase='valid')
     valid_loaders = [] #[DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers)]
@@ -47,10 +47,10 @@ else:
     models = []
     optimizers = []
     for i in range(args.n_folds):
-        train_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, 
+        train_dataset = CloudDataset(root_dataset = args.train_dataset, list_data = args.list_train, 
                                      phase='train', fold_i=i, n_folds=args.n_folds)
         train_loaders.append(DataLoader(train_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers))
-        valid_dataset = SteelDataset(root_dataset = args.train_dataset, list_data = args.list_train, 
+        valid_dataset = CloudDataset(root_dataset = args.train_dataset, list_data = args.list_train, 
                                      phase='valid', fold_i=i, n_folds=args.n_folds)
         valid_loaders.append(DataLoader(valid_dataset, batch_size = args.batch_size, shuffle=True, num_workers=args.num_workers))
         models.append(torchvision.models.resnet101(pretrained=True))

@@ -38,17 +38,9 @@ from catalyst.dl.callbacks import DiceCallback, EarlyStoppingCallback, InferCall
 
 import segmentation_models_pytorch as smp
 
+from args import *
 from helper_functions_and_classes import *
 from dataset import *
-
-path = '../input/understanding_cloud_organization'
-num_workers = 0
-bs = 16
-num_epochs = 19
-logdir = "./logs/segmentation"
-ENCODER = 'resnet50'
-ENCODER_WEIGHTS = 'imagenet'
-DEVICE = 'cuda'
 
 ACTIVATION = None
 model = smp.Unet(

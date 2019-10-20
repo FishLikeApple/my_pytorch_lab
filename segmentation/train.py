@@ -53,6 +53,10 @@ preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
 train = pd.read_csv(f'{path}/train.csv')
 sub = pd.read_csv(f'{path}/sample_submission.csv')
+train['label'] = train['Image_Label'].apply(lambda x: x.split('_')[1])
+train['im_id'] = train['Image_Label'].apply(lambda x: x.split('_')[0])
+sub['label'] = sub['Image_Label'].apply(lambda x: x.split('_')[1])
+sub['im_id'] = sub['Image_Label'].apply(lambda x: x.split('_')[0])
 n_train = len(os.listdir(f'{path}/train_images'))
 n_test = len(os.listdir(f'{path}/test_images'))
 id_mask_count = train.loc[train['EncodedPixels'].isnull() == False, 'Image_Label'].apply(lambda x: x.split('_')[0]).value_counts().\
@@ -63,7 +67,6 @@ train_dataset = CloudDataset(df=train, datatype='train', img_ids=train_ids, tran
                              preprocessing=get_preprocessing(preprocessing_fn))
 valid_dataset = CloudDataset(df=train, datatype='valid', img_ids=valid_ids, transforms = get_validation_augmentation(), 
                              preprocessing=get_preprocessing(preprocessing_fn))
-
 train_loader = DataLoader(train_dataset, batch_size=bs, shuffle=True, num_workers=num_workers)
 valid_loader = DataLoader(valid_dataset, batch_size=bs, shuffle=False, num_workers=num_workers)
 

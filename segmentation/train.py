@@ -43,16 +43,32 @@ from dataset import *
 
 num_workers = 0
 bs = 16
+ENCODER = 'resnet50'
+ENCODER_WEIGHTS = 'imagenet'
+DEVICE = 'cuda'
+
+ACTIVATION = None
+model = smp.Unet(
+    encoder_name=ENCODER, 
+    encoder_weights=ENCODER_WEIGHTS, 
+    classes=4, 
+    activation=ACTIVATION,
+)
+preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
 path = '../input/understanding_cloud_organization'
 train = pd.read_csv(f'{path}/train.csv')
 sub = pd.read_csv(f'{path}/sample_submission.csv')
 n_train = len(os.listdir(f'{path}/train_images'))
 n_test = len(os.listdir(f'{path}/test_images'))
+id_mask_count = train.loc[train['EncodedPixels'].isnull() == False, 'Image_Label'].apply(lambda x: x.split('_')[0]).value_counts().\
+reset_index().rename(columns={'index': 'img_id', 'Image_Label': 'count'})
 train_ids, valid_ids = train_test_split(id_mask_count['img_id'].values, random_state=42, stratify=id_mask_count['count'], test_size=0.1)
 test_ids = sub['Image_Label'].apply(lambda x: x.split('_')[0]).drop_duplicates().values
-train_dataset = CloudDataset(df=train, datatype='train', img_ids=train_ids, transforms = get_training_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
-valid_dataset = CloudDataset(df=train, datatype='valid', img_ids=valid_ids, transforms = get_validation_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
+train_dataset = CloudDataset(df=train, datatype='train', img_ids=train_ids, transforms = get_training_augmentation(), 
+                             preprocessing=get_preprocessing(preprocessing_fn))
+valid_dataset = CloudDataset(df=train, datatype='valid', img_ids=valid_ids, transforms = get_validation_augmentation(), 
+                             preprocessing=get_preprocessing(preprocessing_fn))
 
 train_loader = DataLoader(train_dataset, batch_size=bs, shuffle=True, num_workers=num_workers)
 valid_loader = DataLoader(valid_dataset, batch_size=bs, shuffle=False, num_workers=num_workers)
@@ -73,19 +89,6 @@ optimizer = torch.optim.Adam([
 scheduler = ReduceLROnPlateau(optimizer, factor=0.15, patience=2)
 criterion = smp.utils.losses.BCEDiceLoss(eps=1.)
 runner = SupervisedRunner()
-
-ENCODER = 'resnet50'
-ENCODER_WEIGHTS = 'imagenet'
-DEVICE = 'cuda'
-
-ACTIVATION = None
-model = smp.Unet(
-    encoder_name=ENCODER, 
-    encoder_weights=ENCODER_WEIGHTS, 
-    classes=4, 
-    activation=ACTIVATION,
-)
-preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
 runner.train(
     model=model,

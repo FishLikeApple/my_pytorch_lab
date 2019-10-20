@@ -38,6 +38,8 @@ from catalyst.dl.callbacks import DiceCallback, EarlyStoppingCallback, InferCall
 
 import segmentation_models_pytorch as smp
 
+from args import * 
+
 class CloudDataset(Dataset):
     def __init__(self, df: pd.DataFrame = None, datatype: str = 'train', img_ids: np.array = None,
                  transforms = albu.Compose([albu.HorizontalFlip(),AT.ToTensor()]),

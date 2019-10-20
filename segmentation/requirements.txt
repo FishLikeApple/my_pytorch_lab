@@ -1,0 +1,5 @@
+catalyst
+pretrainedmodels
+git+https://github.com/qubvel/segmentation_models.pytorch
+pytorch_toolbelt
+torchvision==0.4

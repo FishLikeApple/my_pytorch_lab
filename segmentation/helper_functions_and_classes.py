@@ -38,6 +38,8 @@ from catalyst.dl.callbacks import DiceCallback, EarlyStoppingCallback, InferCall
 
 import segmentation_models_pytorch as smp
 
+from args import *
+
 def get_img(x, folder: str='train_images'):
     """
     Return image based on image name and folder.

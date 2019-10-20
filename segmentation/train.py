@@ -40,6 +40,7 @@ from catalyst.dl.callbacks import DiceCallback, EarlyStoppingCallback, InferCall
 import segmentation_models_pytorch as smp
 
 from helper_functions_and_classes import *
+from dataset import *
 
 num_workers = 0
 bs = 16
@@ -65,6 +66,19 @@ optimizer = torch.optim.Adam([
 scheduler = ReduceLROnPlateau(optimizer, factor=0.15, patience=2)
 criterion = smp.utils.losses.BCEDiceLoss(eps=1.)
 runner = SupervisedRunner()
+
+ENCODER = 'resnet50'
+ENCODER_WEIGHTS = 'imagenet'
+DEVICE = 'cuda'
+
+ACTIVATION = None
+model = smp.Unet(
+    encoder_name=ENCODER, 
+    encoder_weights=ENCODER_WEIGHTS, 
+    classes=4, 
+    activation=ACTIVATION,
+)
+preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
 runner.train(
     model=model,

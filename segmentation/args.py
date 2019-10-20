@@ -1,6 +1,6 @@
 path = '../input/understanding_cloud_organization'
 num_workers = 0
-bs = 16
+bs = 4
 num_epochs = 19
 logdir = "./logs/segmentation"
 ENCODER = 'resnet50'
@@ -8,7 +8,7 @@ ENCODER_WEIGHTS = 'imagenet'
 DEVICE = 'cuda'
 original_height = 1400
 original_width = 2100
-input_height = 350
-input_width = 525
+input_height = 1400
+input_width = 2100
 inference_height = 350
 inference_width = 525

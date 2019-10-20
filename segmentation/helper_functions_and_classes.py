@@ -51,7 +51,7 @@ def get_img(x, folder: str='train_images'):
     return img
 
 
-def rle_decode(mask_rle: str = '', shape: tuple = (1400, 2100)):
+def rle_decode(mask_rle: str = '', shape: tuple = (original_height, original_width)):
     '''
     Decode rle encoded mask.
     
@@ -69,7 +69,7 @@ def rle_decode(mask_rle: str = '', shape: tuple = (1400, 2100)):
     return img.reshape(shape, order='F')
 
 
-def make_mask(df: pd.DataFrame, image_name: str='img.jpg', shape: tuple = (1400, 2100)):
+def make_mask(df: pd.DataFrame, image_name: str='img.jpg', shape: tuple = (original_height, original_width)):
     """
     Create mask based on df, image name and shape.
     """
@@ -193,7 +193,7 @@ def post_process(probability, threshold, min_size):
     # don't remember where I saw it
     mask = cv2.threshold(probability, threshold, 1, cv2.THRESH_BINARY)[1]
     num_component, component = cv2.connectedComponents(mask.astype(np.uint8))
-    predictions = np.zeros((350, 525), np.float32)
+    predictions = np.zeros((inference_height, inference_width), np.float32)
     num = 0
     for c in range(1, num_component):
         p = (component == c)
@@ -210,7 +210,7 @@ def get_training_augmentation():
         albu.ShiftScaleRotate(scale_limit=0.5, rotate_limit=0, shift_limit=0.1, p=0.5, border_mode=0),
         albu.GridDistortion(p=0.5),
         albu.OpticalDistortion(p=0.5, distort_limit=2, shift_limit=0.5),
-        albu.Resize(320, 640)
+        albu.Resize(input_height, input_width)
     ]
     return albu.Compose(train_transform)
 
@@ -218,7 +218,7 @@ def get_training_augmentation():
 def get_validation_augmentation():
     """Add paddings to make image shape divisible by 32"""
     test_transform = [
-        albu.Resize(320, 640)
+        albu.Resize(input_height, input_width)
     ]
     return albu.Compose(test_transform)
 

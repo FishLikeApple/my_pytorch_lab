@@ -41,8 +41,11 @@ import segmentation_models_pytorch as smp
 from helper_functions_and_classes import *
 from dataset import *
 
+path = '../input/understanding_cloud_organization'
 num_workers = 0
 bs = 16
+num_epochs = 19
+logdir = "./logs/segmentation"
 ENCODER = 'resnet50'
 ENCODER_WEIGHTS = 'imagenet'
 DEVICE = 'cuda'
@@ -56,7 +59,6 @@ model = smp.Unet(
 )
 preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
-path = '../input/understanding_cloud_organization'
 train = pd.read_csv(f'{path}/train.csv')
 sub = pd.read_csv(f'{path}/sample_submission.csv')
 n_train = len(os.listdir(f'{path}/train_images'))
@@ -77,9 +79,6 @@ loaders = {
     "train": train_loader,
     "valid": valid_loader
 }
-
-num_epochs = 19
-logdir = "./logs/segmentation"
 
 # model, criterion, optimizer
 optimizer = torch.optim.Adam([

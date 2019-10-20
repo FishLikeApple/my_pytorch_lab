@@ -43,7 +43,7 @@ from helper_functions_and_classes import *
 from dataset import *
 
 ACTIVATION = None
-model = smp.Unet(
+model = smp.PSPNet(
     encoder_name=ENCODER, 
     encoder_weights=ENCODER_WEIGHTS, 
     classes=4, 

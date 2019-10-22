@@ -9,6 +9,6 @@ DEVICE = 'cuda'
 original_height = 1400
 original_width = 2100
 input_height = 350
-input_width = 525
+input_width = 700
 inference_height = 350
 inference_width = 525

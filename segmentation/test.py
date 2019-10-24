@@ -97,7 +97,7 @@ for class_id in range(4):
     class_params[class_id] = (best_threshold, best_size)
     
 test_dataset = CloudDataset(df=sub, datatype='test', img_ids=test_ids, transforms = get_validation_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
-test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=0)
+test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=2)
 
 loaders = {"test": test_loader}
 

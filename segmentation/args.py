@@ -3,6 +3,7 @@ num_workers = 0
 bs = 1
 num_epochs = 19
 logdir = "./logs/segmentation"
+output_logdir = "../input/cloud-master-ouutput/logs/segmentation"
 ENCODER = 'resnet50'
 ENCODER_WEIGHTS = 'imagenet'
 DEVICE = 'cuda'

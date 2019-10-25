@@ -38,11 +38,12 @@ from catalyst.dl.callbacks import DiceCallback, EarlyStoppingCallback, InferCall
 
 import segmentation_models_pytorch as smp
 
-encoded_pixels = []
-loaders = {"infer": valid_loader}
+from args import *
+from helper_functions_and_classes import *
+from dataset import *
+
 runner.infer(
     model=model,
-    loaders=loaders,
     callbacks=[
         CheckpointCallback(
             resume=f"{output_logdir}/checkpoints/best.pth"),

@@ -52,6 +52,10 @@ model = smp.PSPNet(
 
 preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
+
+train = pd.read_csv(f'{path}/train.csv')
+train['label'] = train['Image_Label'].apply(lambda x: x.split('_')[1])
+train['im_id'] = train['Image_Label'].apply(lambda x: x.split('_')[0])
 valid_dataset = CloudDataset(df=train, datatype='valid', img_ids=valid_ids, transforms = get_validation_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
 valid_loader = DataLoader(valid_dataset, batch_size=bs, shuffle=False, num_workers=num_workers)
 

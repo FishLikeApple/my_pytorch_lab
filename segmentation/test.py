@@ -42,6 +42,7 @@ from args import *
 from helper_functions_and_classes import *
 from dataset import *
 
+runner = SupervisedRunner()
 runner.infer(
     model=model,
     callbacks=[

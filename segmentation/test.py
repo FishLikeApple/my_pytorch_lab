@@ -54,6 +54,8 @@ preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
 sub = pd.read_csv(f'{path}/sample_submission.csv')
 test_ids = sub['Image_Label'].apply(lambda x: x.split('_')[0]).drop_duplicates().values
+sub['label'] = sub['Image_Label'].apply(lambda x: x.split('_')[1])
+sub['im_id'] = sub['Image_Label'].apply(lambda x: x.split('_')[0])
 
 test_dataset = CloudDataset(df=sub, datatype='test', img_ids=test_ids, transforms = get_validation_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
 test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=2)

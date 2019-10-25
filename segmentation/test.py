@@ -52,15 +52,10 @@ model = smp.PSPNet(
 
 preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
-sub = pd.read_csv(f'{path}/sample_submission.csv')
-test_ids = sub['Image_Label'].apply(lambda x: x.split('_')[0]).drop_duplicates().values
-sub['label'] = sub['Image_Label'].apply(lambda x: x.split('_')[1])
-sub['im_id'] = sub['Image_Label'].apply(lambda x: x.split('_')[0])
+valid_dataset = CloudDataset(df=train, datatype='valid', img_ids=valid_ids, transforms = get_validation_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
+valid_loader = DataLoader(valid_dataset, batch_size=bs, shuffle=False, num_workers=num_workers)
 
-test_dataset = CloudDataset(df=sub, datatype='test', img_ids=test_ids, transforms = get_validation_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
-test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=num_workers)
-loaders = {"test": test_loader}
-
+loaders = {"infer": valid_loader}
 runner = SupervisedRunner()
 runner.infer(
     model=model,
@@ -85,6 +80,15 @@ for i, (batch, output) in enumerate(tqdm.tqdm(zip(
         if probability.shape != (350, 525):
             probability = cv2.resize(probability, dsize=(525, 350), interpolation=cv2.INTER_LINEAR)
         probabilities[i * 4 + j, :, :] = probability
+
+sub = pd.read_csv(f'{path}/sample_submission.csv')
+test_ids = sub['Image_Label'].apply(lambda x: x.split('_')[0]).drop_duplicates().values
+sub['label'] = sub['Image_Label'].apply(lambda x: x.split('_')[1])
+sub['im_id'] = sub['Image_Label'].apply(lambda x: x.split('_')[0])
+
+test_dataset = CloudDataset(df=sub, datatype='test', img_ids=test_ids, transforms = get_validation_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
+test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=num_workers)
+loaders = {"test": test_loader}
         
 class_params = {}
 for class_id in range(4):

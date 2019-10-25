@@ -50,9 +50,15 @@ model = smp.PSPNet(
     activation=ACTIVATION,
 )
 
+test_dataset = CloudDataset(df=sub, datatype='test', img_ids=test_ids, transforms = get_validation_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
+test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=2)
+
+loaders = {"test": test_loader}
+
 runner = SupervisedRunner()
 runner.infer(
     model=model,
+    loaders=loaders,
     callbacks=[
         CheckpointCallback(
             resume=f"{output_logdir}/checkpoints/best.pth"),
@@ -105,11 +111,6 @@ for class_id in range(4):
     best_size = attempts_df['size'].values[0]
     
     class_params[class_id] = (best_threshold, best_size)
-    
-test_dataset = CloudDataset(df=sub, datatype='test', img_ids=test_ids, transforms = get_validation_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
-test_loader = DataLoader(test_dataset, batch_size=1, shuffle=False, num_workers=2)
-
-loaders = {"test": test_loader}
 
 encoded_pixels = []
 image_id = 0

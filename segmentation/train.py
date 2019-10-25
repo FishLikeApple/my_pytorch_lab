@@ -52,11 +52,8 @@ model = smp.PSPNet(
 preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
 
 train = pd.read_csv(f'{path}/train.csv')
-sub = pd.read_csv(f'{path}/sample_submission.csv')
 train['label'] = train['Image_Label'].apply(lambda x: x.split('_')[1])
 train['im_id'] = train['Image_Label'].apply(lambda x: x.split('_')[0])
-sub['label'] = sub['Image_Label'].apply(lambda x: x.split('_')[1])
-sub['im_id'] = sub['Image_Label'].apply(lambda x: x.split('_')[0])
 n_train = len(os.listdir(f'{path}/train_images'))
 n_test = len(os.listdir(f'{path}/test_images'))
 id_mask_count = train.loc[train['EncodedPixels'].isnull() == False, 'Image_Label'].apply(lambda x: x.split('_')[0]).value_counts().\

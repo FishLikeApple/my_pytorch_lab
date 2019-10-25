@@ -50,6 +50,8 @@ model = smp.PSPNet(
     activation=ACTIVATION,
 )
 
+preprocessing_fn = smp.encoders.get_preprocessing_fn(ENCODER, ENCODER_WEIGHTS)
+
 sub = pd.read_csv(f'{path}/sample_submission.csv')
 test_ids = sub['Image_Label'].apply(lambda x: x.split('_')[0]).drop_duplicates().values
 

@@ -88,7 +88,7 @@ def custom_train(model, criterion, optimizer, data_loader):
     loss_sum = 0
     accumulation_steps = 32 // bs
     optimizer.zero_grad()
-    for idx, (img, segm) in enumerate(tqdm(data_loader)):
+    for idx, (img, segm) in enumerate(tqdm.tqdm(data_loader)):
         img = img.cuda()
         segm = segm.cuda()
         outputs = model(img)
@@ -112,11 +112,10 @@ def custom_train(model, criterion, optimizer, data_loader):
 
 def evaluate(model, data_loader):
     
-    meter = Metric(mode=args.mode)
     model.eval()
     total_loss = 0
     with torch.no_grad():
-        for idx, (img, segm) in enumerate():
+        for idx, (img, segm) in enumerate(data_loader):
             img = img.cuda() 
             segm = segm.cuda() 
             outputs = model(img) 
@@ -125,13 +124,10 @@ def evaluate(model, data_loader):
             del segm
             outputs = outputs.detach().cpu()
             segm = segm.detach().cpu() 
-            meter.update(segm, outputs) 
             total_loss += loss.item()
         
-        dices, iou = meter.get_metrics() 
-        dice, dice_neg, dice_pos = dices 
         torch.cuda.empty_cache() 
-        return total_loss/len(data_loader), iou, dice, dice_neg, dice_pos
+        return total_loss/len(data_loader)
 
 def train(model, criterion, optimizer, scheduler, loaders, callbacks, logdir, num_epochs, verbose):
     """train function using gradient accumulating"""

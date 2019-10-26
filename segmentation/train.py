@@ -81,14 +81,14 @@ scheduler = ReduceLROnPlateau(optimizer, factor=0.15, patience=2)
 criterion = smp.utils.losses.BCEDiceLoss(eps=1.)
 runner = SupervisedRunner()
 
-def custom_train(model, criterion, optimizer, loaders):
+def custom_train(model, criterion, optimizer, data_loader):
       
     model.train()
     total_loss = 0
     loss_sum = 0
     accumulation_steps = 32 // bs
     optimizer.zero_grad()
-    for idx, (img, segm) in enumerate(tqdm(loaders["train"])):
+    for idx, (img, segm) in enumerate(tqdm(data_loader)):
         img = img.cuda()
         segm = segm.cuda()
         outputs = model(img)

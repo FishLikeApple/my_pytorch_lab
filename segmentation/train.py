@@ -81,7 +81,72 @@ scheduler = ReduceLROnPlateau(optimizer, factor=0.15, patience=2)
 criterion = smp.utils.losses.BCEDiceLoss(eps=1.)
 runner = SupervisedRunner()
 
-runner.train(
+def custom_train(model, criterion, optimizer, loaders):
+      
+    model.train()
+    total_loss = 0
+    loss_sum = 0
+    accumulation_steps = 32 // bs
+    optimizer.zero_grad()
+    for idx, (img, segm) in enumerate(tqdm(loaders["train"])):
+        img = img.cuda()
+        segm = segm.cuda()
+        outputs = model(img)
+        loss = criterion(outputs, segm)
+        (loss/accumulation_steps).backward()
+        clipping_value = 1.0
+        torch.nn.utils.clip_grad_norm_(model.parameters(), clipping_value)
+        loss_sum += loss.item()
+        if (idx + 1 ) % accumulation_steps == 0:
+            optimizer.step()
+            optimizer.zero_grad()
+            print('loss:'+str(loss_sum/accumulation_steps))
+            loss_sum = 0
+        total_loss += loss.item()
+        
+        # delete caches
+        del img, segm, outputs, loss
+        torch.cuda.empty_cache()
+            
+    return total_loss/len(data_loader)
+
+def evaluate(model, data_loader):
+    
+    meter = Metric(mode=args.mode)
+    model.eval()
+    total_loss = 0
+    with torch.no_grad():
+        for idx, (img, segm) in enumerate():
+            img = img.cuda() 
+            segm = segm.cuda() 
+            outputs = model(img) 
+            loss = criterion(outputs, segm)
+            del img
+            del segm
+            outputs = outputs.detach().cpu()
+            segm = segm.detach().cpu() 
+            meter.update(segm, outputs) 
+            total_loss += loss.item()
+        
+        dices, iou = meter.get_metrics() 
+        dice, dice_neg, dice_pos = dices 
+        torch.cuda.empty_cache() 
+        return total_loss/len(data_loader), iou, dice, dice_neg, dice_pos
+
+def train(model, criterion, optimizer, scheduler, loaders, callbacks, logdir, num_epochs, verbose):
+    """train function using gradient accumulating"""
+    
+    for i in range(num_epochs):
+        bset_loss = 99999999
+        custom_train(model, criterion, optimizer, loaders["train"])
+        loss = evaluate(model, loaders["valid"])
+        
+        if bset_loss >= loss:
+            torch.save(model.state_dict(), f"{output_logdir}/checkpoints/best.pth")
+            bset_loss = loss
+    
+#runner.train(
+train(
     model=model,
     criterion=criterion,
     optimizer=optimizer,

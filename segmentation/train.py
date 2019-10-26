@@ -59,7 +59,7 @@ n_test = len(os.listdir(f'{path}/test_images'))
 id_mask_count = train.loc[train['EncodedPixels'].isnull() == False, 'Image_Label'].apply(lambda x: x.split('_')[0]).value_counts().\
 reset_index().rename(columns={'index': 'img_id', 'Image_Label': 'count'})
 train_ids, valid_ids = train_test_split(id_mask_count['img_id'].values, random_state=42, stratify=id_mask_count['count'], test_size=0.1)
-test_ids = sub['Image_Label'].apply(lambda x: x.split('_')[0]).drop_duplicates().values
+
 train_dataset = CloudDataset(df=train, datatype='train', img_ids=train_ids, transforms = get_training_augmentation(), 
                              preprocessing=get_preprocessing(preprocessing_fn))
 valid_dataset = CloudDataset(df=train, datatype='valid', img_ids=valid_ids, transforms = get_validation_augmentation(), 

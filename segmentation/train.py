@@ -82,7 +82,7 @@ criterion = smp.utils.losses.BCEDiceLoss(eps=1.)
 runner = SupervisedRunner()
 
 def custom_train(model, criterion, optimizer, data_loader):
-      
+     
     model.train()
     total_loss = 0
     loss_sum = 0
@@ -97,7 +97,7 @@ def custom_train(model, criterion, optimizer, data_loader):
         clipping_value = 1.0
         torch.nn.utils.clip_grad_norm_(model.parameters(), clipping_value)
         loss_sum += loss.item()
-        if (idx + 1 ) % accumulation_steps == 0:
+        if (idx + 1) % accumulation_steps == 0:
             optimizer.step()
             optimizer.zero_grad()
             print('loss:'+str(loss_sum/accumulation_steps))
@@ -132,6 +132,7 @@ def evaluate(model, data_loader):
 def train(model, criterion, optimizer, scheduler, loaders, callbacks, logdir, num_epochs, verbose):
     """train function using gradient accumulating"""
     
+    model = model.cuda()
     for i in range(num_epochs):
         bset_loss = 99999999
         custom_train(model, criterion, optimizer, loaders["train"])

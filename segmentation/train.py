@@ -132,6 +132,7 @@ def train(model, criterion, optimizer, scheduler, loaders, callbacks, logdir, nu
     """train function using gradient accumulating"""
     
     model = model.cuda()
+    torch.save(model.state_dict(), f"{logdir}/checkpoints/best.pth")
     for i in range(num_epochs):
         bset_loss = 99999999
         custom_train(model, criterion, optimizer, loaders["train"])

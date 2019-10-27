@@ -123,7 +123,6 @@ def evaluate(model, data_loader):
             del img
             del segm
             outputs = outputs.detach().cpu()
-            segm = segm.detach().cpu() 
             total_loss += loss.item()
         
         torch.cuda.empty_cache() 

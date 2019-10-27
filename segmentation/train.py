@@ -138,7 +138,7 @@ def train(model, criterion, optimizer, scheduler, loaders, callbacks, logdir, nu
         loss = evaluate(model, loaders["valid"])
         
         if bset_loss >= loss:
-            torch.save(model.state_dict(), f"{output_logdir}/checkpoints/best.pth")
+            torch.save(model.state_dict(), f"{logdir}/checkpoints/best.pth")
             bset_loss = loss
     
 #runner.train(

@@ -4,7 +4,10 @@ num_workers = 0
 bs = 1
 num_epochs = 12
 logdir = "./logs/segmentation"
-output_logdir = "../input/cloud-master-ouutput/logs/segmentation"
+if use_gradient_accumulating:
+  output_logdir = "../input/cloud-master-ouutput"
+else:
+  output_logdir = "../input/cloud-master-ouutput-o/logs/segmentation"
 ENCODER = 'resnet50'
 ENCODER_WEIGHTS = 'imagenet'
 DEVICE = 'cuda'

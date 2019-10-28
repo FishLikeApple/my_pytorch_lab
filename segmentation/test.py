@@ -64,12 +64,15 @@ valid_loader = DataLoader(valid_dataset, batch_size=bs, shuffle=False, num_worke
 
 loaders = {"infer": valid_loader}
 runner = SupervisedRunner()
+model.load_state_dict(torch.load(f"{output_logdir}/checkpoints/best.pth"))
 runner.infer(
     model=model,
     loaders=loaders,
+    '''
     callbacks=[
         CheckpointCallback(
             resume=f"{output_logdir}/checkpoints/best.pth"),
+    '''
         InferCallback()
     ],
 )

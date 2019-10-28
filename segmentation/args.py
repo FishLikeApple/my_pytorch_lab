@@ -1,7 +1,7 @@
 path = '../input/understanding_cloud_organization'
 num_workers = 0
 bs = 1
-num_epochs = 19
+num_epochs = 12
 logdir = "./logs/segmentation"
 output_logdir = "../input/cloud-master-ouutput/logs/segmentation"
 ENCODER = 'resnet50'

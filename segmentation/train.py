@@ -141,8 +141,8 @@ def train(model, criterion, optimizer, scheduler, loaders, callbacks, logdir, nu
             torch.save(model.state_dict(), f"{logdir}/checkpoints/best.pth")
             bset_loss = loss
     
-#runner.train(
-train(
+runner.train(
+#train(
     model=model,
     criterion=criterion,
     optimizer=optimizer,

@@ -62,13 +62,24 @@ _, valid_ids = train_test_split(id_mask_count['img_id'].values, random_state=42,
 valid_dataset = CloudDataset(df=train, datatype='valid', img_ids=valid_ids, transforms = get_validation_augmentation(), preprocessing=get_preprocessing(preprocessing_fn))
 valid_loader = DataLoader(valid_dataset, batch_size=bs, shuffle=False, num_workers=num_workers)
 
+if use_gradient_accumulating:
+    state = {
+    "status": 'not used',
+    "epoch": 10,
+    "arch": 'Unet',
+    "state_dict": torch.load(f"{output_logdir}/checkpoints/best.pth")
+    }
+    torch.save(state, 'best.pth')
+
 loaders = {"infer": valid_loader}
 runner = SupervisedRunner()
-model.load_state_dict(torch.load(f"{output_logdir}/checkpoints/best.pth"))
 runner.infer(
     model=model,
-    loaders=loaders
-
+    loaders=loaders,
+    callbacks=[
+        CheckpointCallback(
+            resume=f"{output_logdir}/checkpoints/best.pth"),
+        InferCallback()
 )
 valid_masks = []
 probabilities = np.zeros((2220, 350, 525))

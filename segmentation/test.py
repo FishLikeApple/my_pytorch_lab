@@ -68,13 +68,7 @@ model.load_state_dict(torch.load(f"{output_logdir}/checkpoints/best.pth"))
 runner.infer(
     model=model,
     loaders=loaders
-'''
-    callbacks=[
-        CheckpointCallback(
-            resume=f"{output_logdir}/checkpoints/best.pth"),
-        InferCallback()
-    ],
-'''
+
 )
 valid_masks = []
 probabilities = np.zeros((2220, 350, 525))

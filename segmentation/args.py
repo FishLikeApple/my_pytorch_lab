@@ -1,3 +1,4 @@
+use_gradient_accumulating = Flase#True
 path = '../input/understanding_cloud_organization'
 num_workers = 0
 bs = 1

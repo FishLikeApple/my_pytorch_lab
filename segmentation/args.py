@@ -5,7 +5,7 @@ bs = 1
 num_epochs = 12
 logdir = "./logs/segmentation"
 if use_gradient_accumulating:
-  output_logdir = "../input/cloud-master-output"
+  output_logdir = "../input/cloud-master-output/logs/segmentation"
 else:
   output_logdir = "../input/cloud-master-output-o/logs/segmentation"
 ENCODER = 'resnet50'

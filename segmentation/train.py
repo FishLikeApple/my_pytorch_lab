@@ -93,7 +93,7 @@ def custom_train(model, criterion, optimizer, data_loader):
         segm = segm.cuda()
         outputs = model(img)
         loss = criterion(outputs, segm)
-        (loss/accumulation_steps).backward()
+        loss.backward()
         clipping_value = 1.0
         torch.nn.utils.clip_grad_norm_(model.parameters(), clipping_value)
         loss_sum += loss.item()

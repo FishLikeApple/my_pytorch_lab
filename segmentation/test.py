@@ -82,7 +82,7 @@ runner.infer(
     callbacks=[
         CheckpointCallback(
             resume=resume_path,
-        InferCallback()
+        InferCallback()]
 )
 valid_masks = []
 probabilities = np.zeros((2220, 350, 525))

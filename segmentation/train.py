@@ -141,18 +141,30 @@ def train(model, criterion, optimizer, scheduler, loaders, callbacks, logdir, nu
             torch.save(model.state_dict(), f"{logdir}/checkpoints/best.pth")
             bset_loss = loss
     
-runner.train(
-#train(
-    model=model,
-    criterion=criterion,
-    optimizer=optimizer,
-    scheduler=scheduler,
-    loaders=loaders,
-    callbacks=[DiceCallback(), EarlyStoppingCallback(patience=5, min_delta=0.001)],
-    logdir=logdir,
-    num_epochs=num_epochs,
-    verbose=True
-)
+if use_gradient_accumulating:
+    train(
+        model=model,
+        criterion=criterion,
+        optimizer=optimizer,
+        scheduler=scheduler,
+        loaders=loaders,
+        callbacks=[DiceCallback(), EarlyStoppingCallback(patience=5, min_delta=0.001)],
+        logdir=logdir,
+        num_epochs=num_epochs,
+        verbose=True
+    )
+else:
+    runner.train(
+        model=model,
+        criterion=criterion,
+        optimizer=optimizer,
+        scheduler=scheduler,
+        loaders=loaders,
+        callbacks=[DiceCallback(), EarlyStoppingCallback(patience=5, min_delta=0.001)],
+        logdir=logdir,
+        num_epochs=num_epochs,
+        verbose=True
+    )
 
 utils.plot_metrics(
     logdir=logdir, 

@@ -67,7 +67,7 @@ if use_gradient_accumulating:
     "status": 'not used',
     "epoch": 10,
     "arch": 'Unet',
-    "state_dict": torch.load(f"{output_logdir}/checkpoints/best.pth")
+    "model_state_dict": torch.load(f"{output_logdir}/checkpoints/best.pth")
     }
     torch.save(state, 'best.pth')
     resume_path = 'best.pth'

@@ -81,7 +81,7 @@ runner.infer(
     loaders=loaders,
     callbacks=[
         CheckpointCallback(
-            resume=resume_path,
+            resume=resume_path),
         InferCallback()]
 )
 valid_masks = []

@@ -72,7 +72,7 @@ if use_gradient_accumulating:
     torch.save(state, 'best.pth')
     resume_path = 'best.pth'
 else:
-    resume_path = f"{output_logdir}/checkpoints/best.pth")
+    resume_path = f"{output_logdir}/checkpoints/best.pth"
 
 loaders = {"infer": valid_loader}
 runner = SupervisedRunner()

@@ -70,6 +70,9 @@ if use_gradient_accumulating:
     "state_dict": torch.load(f"{output_logdir}/checkpoints/best.pth")
     }
     torch.save(state, 'best.pth')
+    resume_path = 'best.pth'
+else:
+    resume_path = f"{output_logdir}/checkpoints/best.pth")
 
 loaders = {"infer": valid_loader}
 runner = SupervisedRunner()
@@ -78,7 +81,7 @@ runner.infer(
     loaders=loaders,
     callbacks=[
         CheckpointCallback(
-            resume=f"{output_logdir}/checkpoints/best.pth"),
+            resume=resume_path,
         InferCallback()
 )
 valid_masks = []

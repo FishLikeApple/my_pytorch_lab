@@ -86,7 +86,7 @@ def custom_train(model, criterion, optimizer, data_loader):
     model.train()
     total_loss = 0
     loss_sum = 0
-    accumulation_steps = 32 // bs
+    accumulation_steps = 16 // bs
     optimizer.zero_grad()
     for idx, (img, segm) in enumerate(tqdm.tqdm(data_loader)):
         img = img.cuda()
@@ -94,8 +94,8 @@ def custom_train(model, criterion, optimizer, data_loader):
         outputs = model(img)
         loss = criterion(outputs, segm)
         loss.backward()
-        clipping_value = 1.0
-        torch.nn.utils.clip_grad_norm_(model.parameters(), clipping_value)
+        #clipping_value = 1.0
+        #torch.nn.utils.clip_grad_norm_(model.parameters(), clipping_value)
         loss_sum += loss.item()
         if (idx + 1) % accumulation_steps == 0:
             optimizer.step()

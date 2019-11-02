@@ -5,7 +5,7 @@ if use_gradient_accumulating:
   bs = 1
 else:
   bs = 16
-num_epochs = 12
+num_epochs = 10
 logdir = "./logs/segmentation"
 if use_gradient_accumulating:
   output_logdir = "../input/cloud-master-output/logs/segmentation"

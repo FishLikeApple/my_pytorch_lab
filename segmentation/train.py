@@ -136,6 +136,8 @@ def train(model, criterion, optimizer, scheduler, loaders, callbacks, logdir, nu
         bset_loss = 99999999
         custom_train(model, criterion, optimizer, loaders["train"])
         loss = evaluate(model, loaders["valid"])
+        with open(f"{logdir}/logs.txt", 'a') as f:
+            print(f"loss:{loss}  epoch:{i}", file=f)
         
         if bset_loss >= loss:
             torch.save(model.state_dict(), f"{logdir}/checkpoints/best.pth")

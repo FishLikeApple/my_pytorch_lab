@@ -1,4 +1,4 @@
-use_gradient_accumulating = False#True
+use_gradient_accumulating = True
 path = '../input/understanding_cloud_organization'
 num_workers = 0
 if use_gradient_accumulating:

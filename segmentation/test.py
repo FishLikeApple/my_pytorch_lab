@@ -64,22 +64,23 @@ valid_loader = DataLoader(valid_dataset, batch_size=bs, shuffle=False, num_worke
 
 for possible_output_logdir in output_logdir_list:
     try:
-        if use_gradient_accumulating:
-            state = {
-            "status": 'not used',
-            "epoch": 10,
-            "arch": 'Unet',
-            "model_state_dict": torch.load(f"{possible_output_logdir}/checkpoints/best.pth")
-            }
-            torch.save(state, 'best.pth')
-            resume_path = 'best.pth'
-            print('break')
-            break
-        else:
-            resume_path = f"{possible_output_logdir}/checkpoints/best.pth"
+        with open(f"{possible_output_logdir}/checkpoints/best.pth", 'r'):
+            output_logdir = possible_output_logdir
     except IOError as e:
         print(e)
 
+if use_gradient_accumulating:
+    state = {
+    "status": 'not used',
+    "epoch": 10,
+    "arch": 'Unet',
+    "model_state_dict": torch.load(f"{output_logdir}/checkpoints/best.pth")
+    }
+    torch.save(state, 'best.pth')
+    resume_path = 'best.pth'
+else:
+    resume_path = f"{output_logdir}/checkpoints/best.pth"
+        
 loaders = {"infer": valid_loader}
 runner = SupervisedRunner()
 runner.infer(

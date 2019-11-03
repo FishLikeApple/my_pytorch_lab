@@ -7,10 +7,9 @@ else:
   bs = 16
 num_epochs = 10
 logdir = "./logs/segmentation"
-if use_gradient_accumulating:
-  output_logdir = "../input/cloud-master-output/logs/segmentation"
-else:
-  output_logdir = "../input/cloud-master-output-o/logs/segmentation"
+output_logdir_list = ["../input/cloud-master-output/logs/segmentation",
+                      "../input/cloud-master-output-o/logs/segmentation",
+                      "../input/cloud-master-output-c/logs/segmentation"]
 ENCODER = 'resnet50'
 ENCODER_WEIGHTS = 'imagenet'
 DEVICE = 'cuda'

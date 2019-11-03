@@ -73,6 +73,7 @@ for possible_output_logdir in output_logdir_list:
             }
             torch.save(state, 'best.pth')
             resume_path = 'best.pth'
+            break
         else:
             resume_path = f"{possible_output_logdir}/checkpoints/best.pth"
     except IOError as e:

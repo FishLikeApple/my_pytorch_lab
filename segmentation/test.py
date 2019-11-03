@@ -75,6 +75,8 @@ for possible_output_logdir in output_logdir_list:
             resume_path = 'best.pth'
         else:
             resume_path = f"{possible_output_logdir}/checkpoints/best.pth"
+    except:
+        pass
 
 loaders = {"infer": valid_loader}
 runner = SupervisedRunner()

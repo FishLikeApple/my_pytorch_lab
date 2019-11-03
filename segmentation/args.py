@@ -2,7 +2,7 @@ use_gradient_accumulating = False#True
 path = '../input/understanding_cloud_organization'
 num_workers = 0
 if use_gradient_accumulating:
-  bs = 1
+  bs = 16
 else:
   bs = 16
 num_epochs = 10
